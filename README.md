@@ -50,7 +50,7 @@
 
 1. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/ваш-username/fixmycar.git
+   git clone https://github.com/dimin7226/fixmycar.git
    ```
 2. Перейдите в папку проекта:
    ```bash

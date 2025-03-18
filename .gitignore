@@ -13,6 +13,7 @@ release.properties
 *.iml
 *.iws
 out/
+/target/
 
 # Eclipse
 .project

@@ -3,9 +3,11 @@ package com.fixmycar.service;
 import com.fixmycar.model.Car;
 import com.fixmycar.model.Customer;
 import com.fixmycar.model.ServiceCenter;
+import com.fixmycar.model.ServiceRequest;
 import com.fixmycar.repository.CarRepository;
 import com.fixmycar.repository.CustomerRepository;
 import com.fixmycar.repository.ServiceCenterRepository;
+import com.fixmycar.repository.ServiceRequestRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ public class CarService {
     private final CarRepository carRepository;
     private final CustomerRepository customerRepository;
     private final ServiceCenterRepository serviceCenterRepository;
+    private final ServiceRequestRepository serviceRequestRepository;
 
     public List<Car> getAllCars() {
         return carRepository.findAll();
@@ -39,26 +42,48 @@ public class CarService {
         return carRepository.save(car);
     }
 
-    public Car updateCar(Long id, Car carDetails) {
-        Car car = getCarById(id);
+    public Car updateCarInfo(Long carId, Car updatedCar) {
+        Car existingCar = getCarById(carId);
 
-        car.setBrand(carDetails.getBrand());
-        car.setModel(carDetails.getModel());
-        car.setVin(carDetails.getVin());
-        car.setYear(carDetails.getYear());
+        existingCar.setBrand(updatedCar.getBrand());
+        existingCar.setModel(updatedCar.getModel());
+        existingCar.setVin(updatedCar.getVin());
+        existingCar.setYear(updatedCar.getYear());
 
-        // Обновляем клиента, если он указан
-        if (carDetails.getCustomer() != null && carDetails.getCustomer().getId() != null) {
-            Customer customer = customerRepository.findById(carDetails.getCustomer().getId())
-                    .orElseThrow(() -> new RuntimeException("Клиент не найден"));
-            car.setCustomer(customer);
-        }
-
-        return carRepository.save(car);
+        return carRepository.save(existingCar);
     }
 
     public void deleteCar(Long id) {
-        carRepository.deleteById(id);
+
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Car not found"));
+
+        List<ServiceRequest> serviceRequests = car.getServiceRequests();
+        if (serviceRequests != null && !serviceRequests.isEmpty()) {
+            serviceRequestRepository.deleteAll(serviceRequests);
+        }
+
+        carRepository.delete(car);
+    }
+
+    @Transactional
+    public Car transferOwnership(Long carId, Long newCustomerId) {
+        Car car = getCarById(carId);
+        Customer newOwner = customerRepository.findById(newCustomerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found with id: " + newCustomerId));
+
+        // Если у автомобиля уже есть владелец, удаляем автомобиль из его списка
+        if (car.getCustomer() != null) {
+            car.getCustomer().getCars().remove(car);
+        }
+
+        // Устанавливаем нового владельца
+        car.setCustomer(newOwner);
+
+        // Добавляем автомобиль в список автомобилей нового владельца
+        newOwner.getCars().add(car);
+
+        return carRepository.save(car);
     }
 
     public List<Car> getCarsByCustomerId(Long customerId) {
@@ -70,12 +95,12 @@ public class CarService {
     }
 
     public Car assignToCustomer(Car car, Long customerId) {
-        if (!customerRepository.existsById(customerId)) {
-            throw new RuntimeException("Customer not found with id: " + customerId);
-        }
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found with id: " + customerId));
 
-        Customer customer = customerRepository.findById(customerId).get();
         car.setCustomer(customer);
+        customer.getCars().add(car);
+
         return carRepository.save(car);
     }
 

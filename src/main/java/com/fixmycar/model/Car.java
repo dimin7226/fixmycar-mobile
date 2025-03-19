@@ -23,34 +23,37 @@ import lombok.NoArgsConstructor;
 //import jakarta.persistence.*;
 //import lombok.*;
 
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Car {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Entity
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    public class Car {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    private String brand;
-    private String model;
-    private String vin;
-    private int year;
+        private String brand;
+        private String model;
+        private String vin;
+        private int year;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "customer_id", nullable = false)
+        @JsonIgnoreProperties({"cars", "serviceRequests"})
+        private Customer customer;
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("car")
-    private List<ServiceRequest> serviceRequests = new ArrayList<>();
+        @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
+        @JsonIgnoreProperties({"car", "customer", "serviceCenter"})
+        private List<ServiceRequest> serviceRequests = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "car_service_center",
-            joinColumns = @JoinColumn(name = "car_id"),
-            inverseJoinColumns = @JoinColumn(name = "service_center_id")
-    )
-    private List<ServiceCenter> serviceCenters = new ArrayList<>();
-}
+        @ManyToMany(fetch = FetchType.EAGER)
+        @JoinTable(
+                name = "car_service_center",
+                joinColumns = @JoinColumn(name = "car_id"),
+                inverseJoinColumns = @JoinColumn(name = "service_center_id")
+        )
+        @JsonIgnoreProperties({"cars", "serviceRequests"})
+        private List<ServiceCenter> serviceCenters = new ArrayList<>();
+    }

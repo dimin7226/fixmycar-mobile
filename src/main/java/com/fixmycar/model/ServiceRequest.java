@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ServiceRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,14 +32,16 @@ public class ServiceRequest {
 
     @ManyToOne
     @JoinColumn(name = "car_id")
-    @JsonIgnoreProperties("serviceRequests")
+    @JsonIgnoreProperties({"serviceRequests", "customer", "serviceCenters"})
     private Car car;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonIgnoreProperties({"serviceRequests", "cars"})
     private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "service_center_id")
+    @JsonIgnoreProperties({"serviceRequests", "cars"})
     private ServiceCenter serviceCenter;
 }

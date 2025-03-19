@@ -38,8 +38,14 @@ public class CarController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Car> updateCar(@PathVariable Long id, @RequestBody Car car) {
-        car.setId(id);
-        return ResponseEntity.ok(carService.saveCar(car));
+        return ResponseEntity.ok(carService.updateCarInfo(id, car));
+    }
+
+    @PutMapping("/{carId}/transfer/customer/{newCustomerId}")
+    public ResponseEntity<Car> transferCarOwnership(
+            @PathVariable Long carId,
+            @PathVariable Long newCustomerId) {
+        return ResponseEntity.ok(carService.transferOwnership(carId, newCustomerId));
     }
 
     @DeleteMapping("/{id}")

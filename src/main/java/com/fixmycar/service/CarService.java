@@ -120,8 +120,6 @@ public class CarService {
 
     public Car removeFromServiceCenter(Long carId, Long serviceCenterId) {
         Car car = getCarById(carId);
-        ServiceCenter serviceCenter = serviceCenterRepository.findById(serviceCenterId)
-                .orElseThrow(() -> new RuntimeException("Сервисный центр не найден"));
 
         car.getServiceCenters().removeIf(sc -> sc.getId().equals(serviceCenterId));
 

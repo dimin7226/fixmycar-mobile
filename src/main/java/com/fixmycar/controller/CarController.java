@@ -5,7 +5,14 @@ import com.fixmycar.service.CarService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/home/cars")
@@ -55,22 +62,4 @@ public class CarController {
     public List<Car> getCarsByServiceCenterId(@PathVariable Long serviceCenterId) {
         return carService.getCarsByServiceCenterId(serviceCenterId);
     }
-
-    /*@PostMapping("/{carId}/customer/{customerId}")
-    public ResponseEntity<Car> assignToCustomer(@PathVariable Long carId,
-    @PathVariable Long customerId) {
-        return ResponseEntity.ok(carService.assignToCustomer(carId, customerId));
-    }
-
-    @PostMapping("/{carId}/service-center/{serviceCenterId}")
-    public ResponseEntity<Car> addToServiceCenter(@PathVariable Long carId,
-    @PathVariable Long serviceCenterId) {
-        return ResponseEntity.ok(carService.addToServiceCenter(carId, serviceCenterId));
-    }
-
-    @DeleteMapping("/{carId}/service-center/{serviceCenterId}")
-    public ResponseEntity<Car> removeFromServiceCenter(@PathVariable Long carId,
-    @PathVariable Long serviceCenterId) {
-        return ResponseEntity.ok(carService.removeFromServiceCenter(carId, serviceCenterId));
-    }*/
 }

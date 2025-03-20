@@ -70,7 +70,8 @@ public class CarService {
     public Car transferOwnership(Long carId, Long newCustomerId) {
         Car car = getCarById(carId);
         Customer newOwner = customerRepository.findById(newCustomerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found with id: " + newCustomerId));
+                .orElseThrow(() ->
+                        new RuntimeException("Customer not found with id: " + newCustomerId));
 
         // Если у автомобиля уже есть владелец, удаляем автомобиль из его списка
         if (car.getCustomer() != null) {
@@ -96,7 +97,8 @@ public class CarService {
 
     public Car assignToCustomer(Car car, Long customerId) {
         Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found with id: " + customerId));
+                .orElseThrow(() ->
+                        new RuntimeException("Customer not found with id: " + customerId));
 
         car.setCustomer(customer);
         customer.getCars().add(car);

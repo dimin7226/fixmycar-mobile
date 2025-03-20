@@ -1,15 +1,15 @@
 package com.fixmycar.service;
 
-import com.fixmycar.model.Customer;
 import com.fixmycar.model.Car;
+import com.fixmycar.model.Customer;
 import com.fixmycar.model.ServiceRequest;
-import com.fixmycar.repository.CustomerRepository;
 import com.fixmycar.repository.CarRepository;
+import com.fixmycar.repository.CustomerRepository;
 import com.fixmycar.repository.ServiceRequestRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

@@ -21,6 +21,37 @@ public class ServiceRequestService {
     private final CustomerRepository customerRepository;
     private final ServiceCenterRepository serviceCenterRepository;
 
+    private Car findCarById(Long id) {
+        return carRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Машина не найдена"));
+    }
+
+    private Customer findCustomerById(Long id) {
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Клиент не найден"));
+    }
+
+    private ServiceCenter findServiceCenterById(Long id) {
+        return serviceCenterRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Сервисный центр не найден"));
+    }
+
+    private void updateEntityReferences(ServiceRequest request, ServiceRequest requestDetails) {
+        if (requestDetails.getCar() != null && requestDetails.getCar().getId() != null) {
+            request.setCar(findCarById(requestDetails.getCar().getId()));
+        }
+
+        if (requestDetails.getCustomer() != null && requestDetails.getCustomer().getId() != null) {
+            request.setCustomer(findCustomerById(requestDetails.getCustomer().getId()));
+        }
+
+        if (requestDetails.getServiceCenter() != null
+                && requestDetails.getServiceCenter().getId() != null) {
+            request.setServiceCenter(findServiceCenterById(requestDetails
+                    .getServiceCenter().getId()));
+        }
+    }
+
     public List<ServiceRequest> getAllRequests() {
         return requestRepository.findAll();
     }
@@ -35,26 +66,7 @@ public class ServiceRequestService {
             request.setCreatedAt(LocalDateTime.now());
         }
 
-        // Проверяем, есть ли у заявки машина, клиент и сервисный центр
-        if (request.getCar() != null && request.getCar().getId() != null) {
-            Car car = carRepository.findById(request.getCar().getId())
-                    .orElseThrow(() -> new RuntimeException("Машина не найдена"));
-            request.setCar(car);
-        }
-
-        if (request.getCustomer() != null && request.getCustomer().getId() != null) {
-            Customer customer = customerRepository.findById(request.getCustomer().getId())
-                    .orElseThrow(() -> new RuntimeException("Клиент не найден"));
-            request.setCustomer(customer);
-        }
-
-        if (request.getServiceCenter() != null && request.getServiceCenter().getId() != null) {
-            ServiceCenter serviceCenter = serviceCenterRepository
-                    .findById(request.getServiceCenter().getId())
-                    .orElseThrow(() -> new RuntimeException("Сервисный центр не найден"));
-            request.setServiceCenter(serviceCenter);
-        }
-
+        updateEntityReferences(request, request);
         return requestRepository.save(request);
     }
 
@@ -64,27 +76,7 @@ public class ServiceRequestService {
         request.setDescription(requestDetails.getDescription());
         request.setStatus(requestDetails.getStatus());
 
-        // Обновляем машину, клиента и сервисный центр, если они указаны
-        if (requestDetails.getCar() != null && requestDetails.getCar().getId() != null) {
-            Car car = carRepository.findById(requestDetails.getCar().getId())
-                    .orElseThrow(() -> new RuntimeException("Машина не найдена"));
-            request.setCar(car);
-        }
-
-        if (requestDetails.getCustomer() != null && requestDetails.getCustomer().getId() != null) {
-            Customer customer = customerRepository.findById(requestDetails.getCustomer().getId())
-                    .orElseThrow(() -> new RuntimeException("Клиент не найден"));
-            request.setCustomer(customer);
-        }
-
-        if (requestDetails.getServiceCenter() != null
-                && requestDetails.getServiceCenter().getId() != null) {
-            ServiceCenter serviceCenter = serviceCenterRepository
-                    .findById(requestDetails.getServiceCenter().getId())
-                    .orElseThrow(() -> new RuntimeException("Сервисный центр не найден"));
-            request.setServiceCenter(serviceCenter);
-        }
-
+        updateEntityReferences(request, requestDetails);
         return requestRepository.save(request);
     }
 
@@ -106,19 +98,10 @@ public class ServiceRequestService {
 
     public ServiceRequest createRequest(Long carId, Long customerId,
                                         Long serviceCenterId, String description) {
-        Car car = carRepository.findById(carId)
-                .orElseThrow(() -> new RuntimeException("Машина не найдена"));
-
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Клиент не найден"));
-
-        ServiceCenter serviceCenter = serviceCenterRepository.findById(serviceCenterId)
-                .orElseThrow(() -> new RuntimeException("Сервисный центр не найден"));
-
         ServiceRequest request = new ServiceRequest();
-        request.setCar(car);
-        request.setCustomer(customer);
-        request.setServiceCenter(serviceCenter);
+        request.setCar(findCarById(carId));
+        request.setCustomer(findCustomerById(customerId));
+        request.setServiceCenter(findServiceCenterById(serviceCenterId));
         request.setDescription(description);
         request.setStatus("PENDING");
         request.setCreatedAt(LocalDateTime.now());

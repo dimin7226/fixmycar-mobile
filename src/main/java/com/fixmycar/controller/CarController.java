@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -61,5 +62,37 @@ public class CarController {
     @GetMapping("/service-center/{serviceCenterId}")
     public List<Car> getCarsByServiceCenterId(@PathVariable Long serviceCenterId) {
         return carService.getCarsByServiceCenterId(serviceCenterId);
+    }
+
+    @GetMapping("/service-center/name/{serviceCenterName}")
+    public List<Car> getCarsByServiceCenterName(@PathVariable String serviceCenterName) {
+        return carService.getCarsByServiceCenterName(serviceCenterName);
+    }
+
+    @GetMapping("/search")
+    public List<Car> getCarsByBrandAndModel(
+            @RequestParam String brand,
+            @RequestParam String model) {
+        return carService.getCarsByBrandAndModel(brand, model);
+    }
+
+    @PostMapping("/{carId}/service-center/{serviceCenterId}")
+    public ResponseEntity<Car> addCarToServiceCenter(
+            @PathVariable Long carId,
+            @PathVariable Long serviceCenterId) {
+        return ResponseEntity.ok(carService.addToServiceCenter(carId, serviceCenterId));
+    }
+
+    @DeleteMapping("/{carId}/service-center/{serviceCenterId}")
+    public ResponseEntity<Car> removeCarFromServiceCenter(
+            @PathVariable Long carId,
+            @PathVariable Long serviceCenterId) {
+        return ResponseEntity.ok(carService.removeFromServiceCenter(carId, serviceCenterId));
+    }
+
+    @DeleteMapping("/cache")
+    public ResponseEntity<Void> clearCache() {
+        carService.clearCaches();
+        return ResponseEntity.noContent().build();
     }
 }

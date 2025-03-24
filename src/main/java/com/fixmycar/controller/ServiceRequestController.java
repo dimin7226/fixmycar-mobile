@@ -31,11 +31,6 @@ public class ServiceRequestController {
         return ResponseEntity.ok(requestService.getRequestById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<ServiceRequest> createRequest(@RequestBody ServiceRequest request) {
-        return ResponseEntity.ok(requestService.saveRequest(request));
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRequest(@PathVariable Long id) {
         requestService.deleteRequest(id);
@@ -57,14 +52,15 @@ public class ServiceRequestController {
         return requestService.getRequestsByServiceCenterId(serviceCenterId);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<ServiceRequest> createCompleteRequest(
-            @RequestParam Long carId,
             @RequestParam Long customerId,
+            @RequestParam Long carId,
             @RequestParam Long serviceCenterId,
             @RequestParam String description) {
-        return ResponseEntity.ok(requestService.createRequest(
-                carId, customerId, serviceCenterId, description));
+        ServiceRequest serviceRequest = requestService.createServiceRequest(customerId,
+                carId, serviceCenterId, description);
+        return ResponseEntity.ok(serviceRequest);
     }
 
     @PutMapping("/{id}/status")

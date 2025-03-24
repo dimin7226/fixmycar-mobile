@@ -11,6 +11,7 @@ import com.fixmycar.repository.ServiceRequestRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -96,15 +97,25 @@ public class ServiceRequestService {
         return requestRepository.findByServiceCenterId(serviceCenterId);
     }
 
-    public ServiceRequest createRequest(Long carId, Long customerId,
-                                        Long serviceCenterId, String description) {
-        ServiceRequest request = new ServiceRequest();
-        request.setCar(findCarById(carId));
-        request.setCustomer(findCustomerById(customerId));
-        request.setServiceCenter(findServiceCenterById(serviceCenterId));
-        request.setDescription(description);
-        request.setStatus("PENDING");
-        request.setCreatedAt(LocalDateTime.now());
+    public ServiceRequest createServiceRequest(Long customerId, Long carId,
+                                               Long serviceCenterId, String description) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new RuntimeException("Car not found"));
+
+        ServiceCenter serviceCenter = serviceCenterRepository.findById(serviceCenterId)
+                .orElseThrow(() -> new RuntimeException("Service center not found"));
+
+        ServiceRequest request = ServiceRequest.builder()
+                .customer(customer)
+                .car(car)
+                .serviceCenter(serviceCenter)
+                .description(description)
+                .status("PENDING")
+                .createdAt(LocalDateTime.now())
+                .build();
 
         return requestRepository.save(request);
     }

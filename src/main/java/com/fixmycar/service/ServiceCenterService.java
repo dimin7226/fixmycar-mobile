@@ -38,7 +38,4 @@ public class ServiceCenterService {
         serviceCenterRepository.deleteById(id);
     }
 
-    public List<ServiceCenter> getServiceCentersByCarId(Long carId) {
-        return serviceCenterRepository.findByCarsId(carId);
-    }
 }

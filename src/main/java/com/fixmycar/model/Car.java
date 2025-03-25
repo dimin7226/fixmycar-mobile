@@ -35,7 +35,7 @@ public class Car {
     private String vin;
     private int year;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnoreProperties({"cars", "serviceRequests"})
     private Customer customer;
@@ -44,12 +44,4 @@ public class Car {
     @JsonIgnoreProperties({"car", "customer", "serviceCenter"})
     private List<ServiceRequest> serviceRequests = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "car_service_center",
-            joinColumns = @JoinColumn(name = "car_id"),
-            inverseJoinColumns = @JoinColumn(name = "service_center_id")
-    )
-    @JsonIgnoreProperties({"cars", "serviceRequests"})
-    private List<ServiceCenter> serviceCenters = new ArrayList<>();
 }

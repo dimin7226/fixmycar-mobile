@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface ServiceCenterRepository extends JpaRepository<ServiceCenter, Long> {
     List<ServiceCenter> findByName(String name);
 
-    List<ServiceCenter> findByCarsId(Long carId);
+    //List<ServiceCenter> findByCarsId(Long carId);
 }

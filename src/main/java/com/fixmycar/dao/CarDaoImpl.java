@@ -33,16 +33,6 @@ public class CarDaoImpl implements CarDao {
     }
 
     @Override
-    public List<Car> findByServiceCentersId(Long serviceCenterId) {
-        return carRepository.findByServiceCentersId(serviceCenterId);
-    }
-
-    @Override
-    public List<Car> findByServiceCentersName(String serviceCenterName) {
-        return carRepository.findByServiceCentersName(serviceCenterName);
-    }
-
-    @Override
     public List<Car> findByBrandAndModel(String brand, String model) {
         return carRepository.findByBrandAndModel(brand, model);
     }
@@ -50,11 +40,6 @@ public class CarDaoImpl implements CarDao {
     @Override
     public List<Car> findByBrandAndModelNative(String brand, String model) {
         return carRepository.findByBrandAndModelNative(brand, model);
-    }
-
-    @Override
-    public List<Car> findWithCustomerAndServiceCentersByServiceCentersId(Long serviceCenterId) {
-        return carRepository.findWithCustomerAndServiceCentersByServiceCentersId(serviceCenterId);
     }
 
     @Override

@@ -41,8 +41,4 @@ public class ServiceCenterController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/car/{carId}")
-    public List<ServiceCenter> getServiceCentersByCarId(@PathVariable Long carId) {
-        return serviceCenterService.getServiceCentersByCarId(carId);
-    }
 }

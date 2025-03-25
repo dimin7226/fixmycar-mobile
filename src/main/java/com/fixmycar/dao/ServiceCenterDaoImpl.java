@@ -28,11 +28,6 @@ public class ServiceCenterDaoImpl implements ServiceCenterDao {
     }
 
     @Override
-    public List<ServiceCenter> findByCarsId(Long carId) {
-        return serviceCenterRepository.findByCarsId(carId);
-    }
-
-    @Override
     public ServiceCenter save(ServiceCenter serviceCenter) {
         return serviceCenterRepository.save(serviceCenter);
     }

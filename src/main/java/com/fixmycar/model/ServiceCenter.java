@@ -29,10 +29,6 @@ public class ServiceCenter {
     private String address;
     private String phone;
 
-    @ManyToMany(mappedBy = "serviceCenters")
-    @JsonIgnore
-    private List<Car> cars = new ArrayList<>();
-
     @OneToMany(mappedBy = "serviceCenter", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ServiceRequest> serviceRequests = new ArrayList<>();

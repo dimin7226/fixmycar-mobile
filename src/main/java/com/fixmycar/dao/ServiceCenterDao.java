@@ -12,7 +12,7 @@ public interface ServiceCenterDao {
 
     List<ServiceCenter> findByName(String name);
 
-    List<ServiceCenter> findByCarsId(Long carId);
+    //List<ServiceCenter> findByCarsId(Long carId);
 
     ServiceCenter save(ServiceCenter serviceCenter);
 

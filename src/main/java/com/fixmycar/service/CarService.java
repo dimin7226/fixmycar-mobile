@@ -185,36 +185,6 @@ public class CarService {
         return savedCar;
     }
 
-    public Car addToServiceCenter(Long carId, Long serviceCenterId) {
-        Car car = getCarById(carId);
-        ServiceCenter serviceCenter = serviceCenterDao.findById(serviceCenterId)
-                .orElseThrow(() -> new RuntimeException("Сервисный центр не найден"));
-
-        Car savedCar = carDao.save(car);
-
-        carCache.put(savedCar.getId(), savedCar);
-
-        serviceCenterCarCache.remove(serviceCenter.getName());
-
-        return savedCar;
-    }
-
-    public Car removeFromServiceCenter(Long carId, Long serviceCenterId) {
-        Car car = getCarById(carId);
-
-        ServiceCenter serviceCenter = serviceCenterDao.findById(serviceCenterId)
-                .orElseThrow(() -> new RuntimeException("Сервисный центр не найден"));
-
-        Car savedCar = carDao.save(car);
-
-        // Update caches
-        carCache.put(savedCar.getId(), savedCar);
-        // Invalidate service center cache
-        serviceCenterCarCache.remove(serviceCenter.getName());
-
-        return savedCar;
-    }
-
     public void clearCaches() {
         carCache.clear();
         customerCarCache.clear();

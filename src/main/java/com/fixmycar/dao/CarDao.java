@@ -14,15 +14,9 @@ public interface CarDao {
 
     List<Car> findByCustomerId(Long customerId);
 
-    //List<Car> findByServiceCentersId(Long serviceCenterId);
-
-    //List<Car> findByServiceCentersName(String serviceCenterName);
-
     List<Car> findByBrandAndModel(String brand, String model);
 
     List<Car> findByBrandAndModelNative(String brand, String model);
-
-    //List<Car> findWithCustomerAndServiceCentersByServiceCentersId(Long serviceCenterId);
 
     Car save(Car car);
 

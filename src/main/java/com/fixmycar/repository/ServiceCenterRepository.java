@@ -8,6 +8,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ServiceCenterRepository extends JpaRepository<ServiceCenter, Long> {
     List<ServiceCenter> findByName(String name);
-
-    //List<ServiceCenter> findByCarsId(Long carId);
 }

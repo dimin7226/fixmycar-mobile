@@ -12,8 +12,6 @@ public interface ServiceCenterDao {
 
     List<ServiceCenter> findByName(String name);
 
-    //List<ServiceCenter> findByCarsId(Long carId);
-
     ServiceCenter save(ServiceCenter serviceCenter);
 
     void delete(ServiceCenter serviceCenter);

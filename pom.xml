@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.fixmycar</groupId>
-	<artifactId>FixMyCar</artifactId>
+	<artifactId>fixmycar</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>FixMyCar</name>
 	<description>FixMyCar</description>
@@ -54,6 +54,12 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.5.0</version> <!-- Актуальная версия -->
 		</dependency>
 
 		<dependency>

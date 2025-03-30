@@ -1,5 +1,7 @@
 package com.fixmycar.service;
 
+import com.fixmycar.cache.InMemoryCache;
+import com.fixmycar.exception.ResourceNotFoundException;
 import com.fixmycar.model.Car;
 import com.fixmycar.model.Customer;
 import com.fixmycar.model.ServiceRequest;
@@ -7,6 +9,7 @@ import com.fixmycar.repository.CarRepository;
 import com.fixmycar.repository.CustomerRepository;
 import com.fixmycar.repository.ServiceRequestRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,58 +20,34 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CarRepository carRepository;
     private final ServiceRequestRepository serviceRequestRepository;
+    private final InMemoryCache<Long, Customer> customerCache;
 
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
 
-    public Customer getCustomerById(Long id) {
-        return customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Клиент не найден"));
+    public Optional<Customer> getCustomerById(Long id) {
+
+        Customer cachedCustomer = customerCache.get(id);
+        if (cachedCustomer != null) {
+            return Optional.of(cachedCustomer);
+        }
+        Optional<Customer> customer = customerRepository.findById(id);
+        customer.ifPresent(acc -> customerCache.put(id, acc));
+
+        return customer;
     }
 
-    public Customer saveCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public Customer saveOrUpdateCustomer(Customer customer) {
+        Customer savedCustomer = customerRepository.save(customer);
+
+        customerCache.put(savedCustomer.getId(), savedCustomer);
+        return savedCustomer;
     }
 
-    public Customer updateCustomer(Long id, Customer customerDetails) {
-        Customer customer = getCustomerById(id);
-
-        customer.setFirstName(customerDetails.getFirstName());
-        customer.setLastName(customerDetails.getLastName());
-        customer.setEmail(customerDetails.getEmail());
-        customer.setPhone(customerDetails.getPhone());
-
-        return customerRepository.save(customer);
-    }
-
-    @Transactional
     public void deleteCustomer(Long id) {
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        customerRepository.deleteById(id);
 
-        List<ServiceRequest> serviceRequests = customer.getServiceRequests();
-        if (serviceRequests != null && !serviceRequests.isEmpty()) {
-            serviceRequestRepository.deleteAll(serviceRequests);
-        }
-
-        List<Car> cars = customer.getCars();
-        if (cars != null && !cars.isEmpty()) {
-            for (Car car : cars) {
-                // Удаляем все заявки, связанные с автомобилем
-                List<ServiceRequest> carServiceRequests = car.getServiceRequests();
-                if (carServiceRequests != null && !carServiceRequests.isEmpty()) {
-                    serviceRequestRepository.deleteAll(carServiceRequests);
-                }
-                // Удаляем автомобиль
-                carRepository.delete(car);
-            }
-        }
-        customerRepository.delete(customer);
-    }
-
-    public Customer findByEmail(String email) {
-        return customerRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Клиент не найден"));
+        customerCache.evict(id);
     }
 }

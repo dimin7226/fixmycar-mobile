@@ -3,12 +3,11 @@ package com.fixmycar.controller;
 import com.fixmycar.exception.ResourceNotFoundException;
 import com.fixmycar.model.Car;
 import com.fixmycar.service.CarService;
-import java.util.List;
-
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,12 +31,14 @@ public class CarController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Получить машину по ID", description = "Возвращает машины по указанному ID")
+    @Operation(summary = "Получить машину по ID",
+            description = "Возвращает машины по указанному ID")
     @ApiResponse(responseCode = "200", description = "Машина найдена")
     @ApiResponse(responseCode = "404", description = "Машина не найдена")
     public ResponseEntity<Car> getCarById(@PathVariable Long id) {
-            Car car = carService.getCarById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Account not found with id " + id));
+        Car car = carService.getCarById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Account not found with id " + id));
         return ResponseEntity.ok(car);
     }
 
@@ -54,10 +55,12 @@ public class CarController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Обновить данные о машине", description = "Обновляет данные о машине по ID")
+    @Operation(summary = "Обновить данные о машине",
+            description = "Обновляет данные о машине по ID")
     @ApiResponse(responseCode = "200", description = "Данные о машине обновлены")
     @ApiResponse(responseCode = "404", description = "Данные о машине не найдены")
-    public ResponseEntity<Car> updateCar(@PathVariable Long id,@Valid @RequestBody Car carDetails) {
+    public ResponseEntity<Car> updateCar(@PathVariable Long id,
+                                         @Valid @RequestBody Car carDetails) {
         Car car = carService.getCarById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Car not found with id " + id));
         car.setBrand(carDetails.getBrand());
@@ -72,6 +75,9 @@ public class CarController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Удалить машину", description = "Удаляет машину по ID")
+    @ApiResponse(responseCode = "204", description = "Машина успешно удалена")
+    @ApiResponse(responseCode = "404", description = "Машина не найдена")
     public ResponseEntity<Void> deleteCar(@PathVariable Long id) {
         carService.deleteCar(id);
         return ResponseEntity.noContent().build();

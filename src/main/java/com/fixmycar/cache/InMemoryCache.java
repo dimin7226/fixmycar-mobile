@@ -1,15 +1,14 @@
 package com.fixmycar.cache;
 
-import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 @SuppressWarnings("squid:S6829")
 @Component
@@ -54,7 +53,8 @@ public class InMemoryCache<K, V> {
         };
 
         // Запускаем планировщик для удаления устаревших элементов
-        scheduler.scheduleAtFixedRate(this::evictExpiredEntries, ttlMillis, ttlMillis, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(this::evictExpiredEntries,
+                ttlMillis, ttlMillis, TimeUnit.MILLISECONDS);
     }
 
     public V get(K key) {

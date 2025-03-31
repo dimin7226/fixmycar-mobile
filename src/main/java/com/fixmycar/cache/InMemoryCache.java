@@ -16,12 +16,20 @@ public class InMemoryCache<K, V> {
 
     private static final Logger logger = LoggerFactory.getLogger(InMemoryCache.class);
 
-    private record CacheEntry<V>(@Getter V value, long expiryTime) {
+    private static class CacheEntry<V> {
+        @Getter
+        private final V value;
+        private final long expiryTime;
+
+        public CacheEntry(V value, long expiryTime) {
+            this.value = value;
+            this.expiryTime = expiryTime;
+        }
 
         public boolean isExpired() {
-                return System.currentTimeMillis() >= expiryTime;
-            }
+            return System.currentTimeMillis() >= expiryTime;
         }
+    }
 
     private final Map<K, CacheEntry<V>> cache;
     private final long ttlMillis;
@@ -60,7 +68,7 @@ public class InMemoryCache<K, V> {
             return null;
         }
         logger.info("Cache hit for key: {}", key);
-        return entry.value();
+        return entry.getValue();
     }
 
     public void put(K key, V value) {

@@ -1,5 +1,7 @@
 package com.fixmycar.controller;
 
+import static com.fixmycar.controller.Constants.REQUEST_NOT_FOUND_ID;
+
 import com.fixmycar.exception.ResourceNotFoundException;
 import com.fixmycar.model.ServiceRequest;
 import com.fixmycar.service.ServiceRequestService;
@@ -39,7 +41,7 @@ public class ServiceRequestController {
     public ResponseEntity<ServiceRequest> getRequestById(@PathVariable Long id) {
         ServiceRequest request = requestService.getRequestById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Request not found with id " + id));
+                        new ResourceNotFoundException(REQUEST_NOT_FOUND_ID + id));
         return ResponseEntity.ok(request);
     }
 
@@ -94,7 +96,7 @@ public class ServiceRequestController {
             @PathVariable Long id, @Valid @RequestBody ServiceRequest requestDetails) {
         ServiceRequest existingRequest = requestService.getRequestById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Request not found with id " + id));
+                        new ResourceNotFoundException(REQUEST_NOT_FOUND_ID + id));
 
         existingRequest.setDescription(requestDetails.getDescription());
         existingRequest.setStatus(requestDetails.getStatus());
@@ -121,9 +123,6 @@ public class ServiceRequestController {
     @ApiResponse(responseCode = "404", description = "Заявка не найдена")
     public ResponseEntity<ServiceRequest> updateStatus(
             @PathVariable Long id, @RequestParam String status) {
-        ServiceRequest existingRequest = requestService.getRequestById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Request not found with id " + id));
         return ResponseEntity.ok(requestService.updateStatus(id, status));
     }
 

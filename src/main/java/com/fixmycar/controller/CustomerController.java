@@ -1,13 +1,10 @@
 package com.fixmycar.controller;
 
 import com.fixmycar.exception.ResourceNotFoundException;
-import com.fixmycar.model.Car;
 import com.fixmycar.model.Customer;
 import com.fixmycar.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

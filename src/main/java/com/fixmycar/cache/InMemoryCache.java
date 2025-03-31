@@ -16,24 +16,15 @@ public class InMemoryCache<K, V> {
 
     private static final Logger logger = LoggerFactory.getLogger(InMemoryCache.class);
 
-    private static class CacheEntry<V> {
-        @Getter
-        private final V value;
-        private final long expiryTime;
-
-        public CacheEntry(V value, long expiryTime) {
-            this.value = value;
-            this.expiryTime = expiryTime;
-        }
+    private record CacheEntry<V>(@Getter V value, long expiryTime) {
 
         public boolean isExpired() {
-            return System.currentTimeMillis() >= expiryTime;
+                return System.currentTimeMillis() >= expiryTime;
+            }
         }
-    }
 
     private final Map<K, CacheEntry<V>> cache;
     private final long ttlMillis;
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     public InMemoryCache() {
         this(300_000, 100);  // TTL 5 минут, максимальный размер 100
@@ -52,7 +43,7 @@ public class InMemoryCache<K, V> {
             }
         };
 
-        // Запускаем планировщик для удаления устаревших элементов
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(this::evictExpiredEntries,
                 ttlMillis, ttlMillis, TimeUnit.MILLISECONDS);
     }
@@ -69,7 +60,7 @@ public class InMemoryCache<K, V> {
             return null;
         }
         logger.info("Cache hit for key: {}", key);
-        return entry.getValue();
+        return entry.value();
     }
 
     public void put(K key, V value) {

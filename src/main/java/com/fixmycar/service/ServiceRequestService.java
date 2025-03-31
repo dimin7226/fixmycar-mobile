@@ -1,5 +1,7 @@
 package com.fixmycar.service;
 
+import com.fixmycar.cache.InMemoryCache;
+import com.fixmycar.exception.ResourceNotFoundException;
 import com.fixmycar.model.Car;
 import com.fixmycar.model.Customer;
 import com.fixmycar.model.ServiceCenter;
@@ -8,33 +10,38 @@ import com.fixmycar.repository.CarRepository;
 import com.fixmycar.repository.CustomerRepository;
 import com.fixmycar.repository.ServiceCenterRepository;
 import com.fixmycar.repository.ServiceRequestRepository;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ServiceRequestService {
     private final ServiceRequestRepository requestRepository;
     private final CarRepository carRepository;
     private final CustomerRepository customerRepository;
     private final ServiceCenterRepository serviceCenterRepository;
+    private final InMemoryCache<Long, ServiceRequest> requestCache;
 
     private Car findCarById(Long id) {
         return carRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Машина не найдена"));
+                .orElseThrow(() -> new ResourceNotFoundException("Машина не найдена"));
     }
 
     private Customer findCustomerById(Long id) {
         return customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Клиент не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Клиент не найден"));
     }
 
     private ServiceCenter findServiceCenterById(Long id) {
         return serviceCenterRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Сервисный центр не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Сервисный центр не найден"));
     }
 
     private void updateEntityReferences(ServiceRequest request, ServiceRequest requestDetails) {
@@ -57,9 +64,15 @@ public class ServiceRequestService {
         return requestRepository.findAll();
     }
 
-    public ServiceRequest getRequestById(Long id) {
-        return requestRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Заявка не найдена"));
+    public Optional<ServiceRequest> getRequestById(Long id) {
+        ServiceRequest cachedRequest = requestCache.get(id);
+        if (cachedRequest != null) {
+            return Optional.of(cachedRequest);
+        }
+        Optional<ServiceRequest> request = requestRepository.findById(id);
+        request.ifPresent(req -> requestCache.put(id, req));
+
+        return request;
     }
 
     public ServiceRequest saveRequest(ServiceRequest request) {
@@ -67,22 +80,39 @@ public class ServiceRequestService {
             request.setCreatedAt(LocalDateTime.now());
         }
 
+        if (request.getStatus() == null) {
+            request.setStatus("PENDING");
+        }
+
         updateEntityReferences(request, request);
-        return requestRepository.save(request);
+        ServiceRequest savedRequest = requestRepository.save(request);
+
+        requestCache.put(savedRequest.getId(), savedRequest);
+        return savedRequest;
     }
 
     public ServiceRequest updateRequest(Long id, ServiceRequest requestDetails) {
-        ServiceRequest request = getRequestById(id);
+        ServiceRequest request = getRequestById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Заявка не найдена с id " + id));
 
         request.setDescription(requestDetails.getDescription());
         request.setStatus(requestDetails.getStatus());
 
         updateEntityReferences(request, requestDetails);
-        return requestRepository.save(request);
+        ServiceRequest updatedRequest = requestRepository.save(request);
+
+        requestCache.put(updatedRequest.getId(), updatedRequest);
+        return updatedRequest;
     }
 
     public void deleteRequest(Long id) {
         requestRepository.deleteById(id);
+        requestCache.evict(id);
+    }
+
+    public List<ServiceRequest> getRequestsByCarAttributes(
+            String brand, String model, Integer year) {
+        return requestRepository.findByCarAttributes(brand, model, year);
     }
 
     public List<ServiceRequest> getRequestsByCustomerId(Long customerId) {
@@ -100,13 +130,16 @@ public class ServiceRequestService {
     public ServiceRequest createServiceRequest(Long customerId, Long carId,
                                                Long serviceCenterId, String description) {
         Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id "
+                        + customerId));
 
         Car car = carRepository.findById(carId)
-                .orElseThrow(() -> new RuntimeException("Car not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Car not found with id "
+                        + carId));
 
         ServiceCenter serviceCenter = serviceCenterRepository.findById(serviceCenterId)
-                .orElseThrow(() -> new RuntimeException("Service center not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Service center not found with id "
+                        + serviceCenterId));
 
         ServiceRequest request = ServiceRequest.builder()
                 .customer(customer)
@@ -117,12 +150,17 @@ public class ServiceRequestService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        return requestRepository.save(request);
+        ServiceRequest savedRequest = requestRepository.save(request);
+        requestCache.put(savedRequest.getId(), savedRequest);
+        return savedRequest;
     }
 
     public ServiceRequest updateStatus(Long id, String status) {
-        ServiceRequest request = getRequestById(id);
+        ServiceRequest request = getRequestById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Заявка не найдена с id " + id));
         request.setStatus(status);
-        return requestRepository.save(request);
+        ServiceRequest updatedRequest = requestRepository.save(request);
+        requestCache.put(updatedRequest.getId(), updatedRequest);
+        return updatedRequest;
     }
 }

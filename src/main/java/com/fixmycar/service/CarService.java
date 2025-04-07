@@ -34,7 +34,6 @@ public class CarService {
         }
         Optional<Car> car = carRepository.findById(id);
         car.ifPresent(acc -> carCache.put(id, acc));
-
         return car;
     }
 

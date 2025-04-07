@@ -1,12 +1,13 @@
 package com.fixmycar.controller;
 
 import com.fixmycar.exception.ResourceNotFoundException;
+import com.fixmycar.exception.ValidationException;
 import com.fixmycar.model.Car;
 import com.fixmycar.service.CarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/home/cars")
 @RequiredArgsConstructor
+@Tag(name = "Car Controller", description = "API для управления автомобилями")
 public class CarController {
     private final CarService carService;
 
@@ -38,7 +40,7 @@ public class CarController {
     public ResponseEntity<Car> getCarById(@PathVariable Long id) {
         Car car = carService.getCarById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Account not found with id " + id));
+                        new ResourceNotFoundException("Car not found with id " + id));
         return ResponseEntity.ok(car);
     }
 

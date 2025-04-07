@@ -5,6 +5,7 @@ import com.fixmycar.model.Customer;
 import com.fixmycar.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/home/customers")
 @RequiredArgsConstructor
+@Tag(name = "Customer Controller", description = "API для управления клиентами")
 public class CustomerController {
     private final CustomerService customerService;
 
@@ -36,7 +38,7 @@ public class CustomerController {
     public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
         Customer customer = customerService.getCustomerById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Account not found with id " + id));
+                        new ResourceNotFoundException("Customer not found with id " + id));
         return ResponseEntity.ok(customer);
     }
 
@@ -57,7 +59,8 @@ public class CustomerController {
     public ResponseEntity<Customer> updateCustomer(@PathVariable Long id,
                                                    @RequestBody Customer customer) {
         Customer customerDetails = customerService.getCustomerById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Car not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Customer not found with id " + id));
         customer.setFirstName(customerDetails.getFirstName());
         customer.setLastName(customerDetails.getLastName());
         customer.setPhone(customerDetails.getPhone());

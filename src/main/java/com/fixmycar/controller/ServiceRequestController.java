@@ -1,12 +1,11 @@
 package com.fixmycar.controller;
 
-import static com.fixmycar.controller.Constants.REQUEST_NOT_FOUND_ID;
-
 import com.fixmycar.exception.ResourceNotFoundException;
 import com.fixmycar.model.ServiceRequest;
 import com.fixmycar.service.ServiceRequestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import java.util.List;
@@ -25,8 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/home/requests")
 @RequiredArgsConstructor
+@Tag(name = "Service Request Controller", description = "API для управления заявками на ремонт")
 public class ServiceRequestController {
     private final ServiceRequestService requestService;
+    private static final String REQUEST_NOT_FOUND_ID = "Request not found with id ";
 
     @GetMapping
     public List<ServiceRequest> getAllRequests() {

@@ -45,6 +45,15 @@ public class GlobalExceptionHandler {
         logger.error("Validation error: {}", ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+    
+    // Обработка исключения ResourceNotFoundException (404)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        // Логируем ошибку с уровнем ERROR
+        logger.error("Resource not found: {}", ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
     // Обработка других исключений (500)
     @ExceptionHandler(Exception.class)

@@ -1,7 +1,7 @@
 package com.fixmycar.controller;
 
+import com.fixmycar.exception.BadRequestException;
 import com.fixmycar.exception.ResourceNotFoundException;
-import com.fixmycar.exception.ValidationException;
 import com.fixmycar.model.Car;
 import com.fixmycar.service.CarService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +50,7 @@ public class CarController {
     @ApiResponse(responseCode = "400", description = "Некорректные данные")
     public ResponseEntity<Car> createCar(@Valid @RequestBody Car car) {
         if (car.getCustomer() == null || car.getCustomer().getId() == null) {
-            throw new ValidationException("User ID is required");
+            throw new BadRequestException("User ID is required");
         }
         Car createdAccount = carService.saveOrUpdateCar(car);
         return ResponseEntity.ok(createdAccount);

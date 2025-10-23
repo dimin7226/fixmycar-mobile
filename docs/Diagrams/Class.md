@@ -1,6 +1,6 @@
 # Диаграмма классов  
 
-![Диаграмма классов](https://github.com/DanutaGagua/Personal-film-collection-manager/blob/master/Diagrams/Images/ClassDiagram.png) 
+![Диаграмма классов](https://github.com/dimin7226/fixmycar-mobile/blob/main/docs/Diagrams/Images/ClassDiagram.png) 
 
 # Глоссарий
 

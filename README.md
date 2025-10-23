@@ -11,5 +11,8 @@ Interface language: xml.
 
 [User interface images](https://github.com/dimin7226/fixmycar-mobile/blob/main/docs/Mockups)
 
+
+[Diagrams](https://github.com/dimin7226/fixmycar-mobile/blob/main/docs/Diagrams)
+
 Used patterns:
 Observer - listeners of buttons

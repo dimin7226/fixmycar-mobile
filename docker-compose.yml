@@ -1,0 +1,87 @@
+#version: '3.8'
+#
+#services:
+#  backend:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.backend
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=prod
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#    restart: unless-stopped
+#
+#  frontend:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.frontend
+#    ports:
+#      - "8081:80"
+#    depends_on:
+#      - backend
+#
+#  db:
+#    image: postgres:15-alpine
+#    environment:
+#      - POSTGRES_DB=tester
+#      - POSTGRES_USER=tester
+#      - POSTGRES_PASSWORD=1234
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#    ports:
+#      - "5433:5432"
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U postgres"]
+#      interval: 5s
+#      timeout: 5s
+#      retries: 5
+#    restart: unless-stopped
+#
+#volumes:
+#  postgres_data:
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:80"
+    networks:
+      - fixmycar
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_URL=${DB_URL}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - database
+    networks:
+      - fixmycar
+
+  database:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    networks:
+      - fixmycar
+    volumes:
+      - fixmycar_postgres_data:/var/lib/postgresql/data
+
+networks:
+  fixmycar:
+      driver: bridge
+
+volumes:
+  fixmycar_postgres_data:

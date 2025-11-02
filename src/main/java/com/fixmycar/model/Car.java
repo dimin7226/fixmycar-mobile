@@ -43,4 +43,7 @@ public class Car {
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"car", "customer", "serviceCenter"})
     private List<ServiceRequest> serviceRequests = new ArrayList<>();
+    public Car(Long id) {
+        this.id = id;
+    }
 }

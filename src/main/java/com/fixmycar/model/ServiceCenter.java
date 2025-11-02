@@ -34,4 +34,10 @@ public class ServiceCenter {
     @OneToMany(mappedBy = "serviceCenter", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ServiceRequest> serviceRequests = new ArrayList<>();
+    public ServiceCenter(Long id, String name, String address, String phone) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+    }
 }

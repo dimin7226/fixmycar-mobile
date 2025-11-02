@@ -1,0 +1,22 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "description": "REST API service для управления автомобилями",
+  "main": "index.js",
+  "scripts": {
+    "test": "fixmycar-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/dimin7226/FixMyCar.git"
+  },
+  "keywords": [
+    "fixmycar"
+  ],
+  "author": "dimin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dimin7226/FixMyCar/issues"
+  },
+  "homepage": "https://github.com/dimin7226/FixMyCar#readme"
+}

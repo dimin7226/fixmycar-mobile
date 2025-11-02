@@ -22,6 +22,18 @@ public class CarService {
     private final CustomerRepository customerRepository;
     private final InMemoryCache<Long, Car> carCache;
 
+    public boolean existsByVin(String vin) {
+        return carRepository.existsByVin(vin);
+    }
+
+    public boolean customerExists(long customerId) {
+        return customerRepository.existsById(customerId);
+    }
+
+    public boolean existsByVinAndIdNot(String vin, long id) {
+        return carRepository.existsByVinAndIdNot(vin, id);
+    }
+
     public List<Car> getAllCars() {
         return carRepository.findAll();
     }

@@ -33,4 +33,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query(value = "SELECT * FROM car c WHERE c.model = :model",
             nativeQuery = true)
     List<Car> findByModelNative(@Param("model") String model);
+
+    boolean existsByVin(String vin);
+
+    boolean existsByVinAndIdNot(String vin, long id);
 }

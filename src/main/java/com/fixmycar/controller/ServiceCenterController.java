@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/home/service-centers")
+@RequestMapping("/api/home/service-centers")
 @RequiredArgsConstructor
 @Tag(name = "Service Center Controller", description = "API для управления автосервисами")
 public class ServiceCenterController {

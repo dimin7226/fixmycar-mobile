@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/home/customers")
+@RequestMapping("/api/home/customers")
 @RequiredArgsConstructor
 @Tag(name = "Customer Controller", description = "API для управления клиентами")
 public class CustomerController {

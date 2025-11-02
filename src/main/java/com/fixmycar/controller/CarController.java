@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/home/cars")
+@RequestMapping("/api/home/cars")
 @RequiredArgsConstructor
 @Tag(name = "Car Controller", description = "API для управления автомобилями")
 public class CarController {

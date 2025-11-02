@@ -46,4 +46,21 @@ public class CustomerService {
 
         customerCache.evict(id);
     }
+
+    public boolean existsByEmail(String email) {
+        return customerRepository.existsByEmail(email);
+    }
+
+    public boolean existsByPhone(String phone) {
+        return customerRepository.existsByPhone(phone);
+    }
+
+    public boolean existsByEmailAndIdNot(String email, long id) {
+        return customerRepository.existsByEmailAndIdNot(email, id);
+    }
+
+    public boolean existsByPhoneAndIdNot(String phone, long id) {
+        return customerRepository.existsByPhoneAndIdNot(phone, id);
+    }
+
 }

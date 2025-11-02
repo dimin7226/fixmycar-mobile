@@ -43,4 +43,7 @@ public class Customer {
             orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"customer", "car", "serviceCenter"})
     private List<ServiceRequest> serviceRequests = new ArrayList<>();
+    public Customer(Long id) {
+        this.id = id;
+    }
 }

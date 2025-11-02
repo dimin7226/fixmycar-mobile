@@ -1,0 +1,237 @@
+.layout {
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    background: #242b4e !important;
+    padding: 0 24px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.logo {
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.logo:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.site-layout-background {
+    background: #fff;
+}
+
+.ant-layout-sider {
+    background: #fff;
+    border-right: 1px solid #f0f0f0;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.06);
+}
+
+.ant-menu-item {
+    margin: 4px 0 !important;
+    border-radius: 4px;
+}
+
+.ant-menu-item:hover {
+    background-color: #f5f5f5 !important;
+}
+
+.ant-table {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.ant-table-thead > tr > th {
+    background: #fafafa !important;
+    font-weight: 600;
+}
+
+.ant-table-tbody > tr:hover > td {
+    background: #f5f5f5 !important;
+}
+
+.ant-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.ant-card-head {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 16px 24px;
+}
+
+.ant-card-head-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.ant-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 24px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.ant-btn {
+    border-radius: 4px;
+    height: 36px;
+    font-weight: 500;
+}
+
+.ant-btn-primary {
+    background: #242b4e;
+    border-color: #242b4e;
+}
+
+.ant-btn-primary:hover {
+    background: #434b7e;
+    border-color: #434b7e;
+}
+
+.ant-input {
+    border-radius: 4px;
+    height: 36px;
+}
+
+.ant-input:hover,
+.ant-input:focus {
+    border-color: #242b4e;
+}
+
+.ant-select-selector {
+    border-radius: 4px !important;
+    height: 36px !important;
+}
+
+.ant-select-selection-item {
+    line-height: 34px !important;
+}
+
+.ant-select-dropdown {
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.content {
+    padding: 24px;
+    background: #f5f5f5;
+}
+
+.ant-table-pagination {
+    margin: 16px 0 !important;
+    padding: 0 16px;
+}
+
+.ant-pagination-item {
+    border-radius: 4px;
+}
+
+.ant-pagination-item-active {
+    background: #434b7e;
+    border-color: #434b7e;
+}
+
+.ant-pagination-item-active a {
+    color: white;
+}
+
+.ant-tag {
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-weight: 500;
+}
+
+.ant-space {
+    gap: 8px !important;
+}
+
+.ant-form-item-label > label {
+    font-weight: 500;
+}
+
+.ant-input-textarea {
+    border-radius: 4px;
+}
+
+.ant-input-textarea:hover,
+.ant-input-textarea:focus {
+    border-color: #242b4e;
+}
+
+.ant-select-focused .ant-select-selector {
+    border-color: #434b7e !important;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.ant-select-item {
+    padding: 8px 12px;
+}
+
+.ant-select-item-option-selected {
+    background-color: #e6f4ff !important;
+    font-weight: 500;
+}
+
+.ant-select-item-option-active {
+    background-color: #f5f5f5 !important;
+}
+
+.custom-menu .ant-menu-item-selected {
+    background-color: #242b4e !important;
+    color: #f5f5f5 !important;
+}
+
+.custom-menu .ant-menu-item:hover {
+    background-color: #242b4e !important;
+    color: #f5f5f5 !important;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.profile-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 16px;
+}
+
+.profile-button-container {
+    z-index: 1000;
+    position: relative;
+}
+
+.profile-button {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+}
+
+.profile-button:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: scale(1.05) !important;
+}
+
+.profile-button:active {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: scale(0.95) !important;
+}

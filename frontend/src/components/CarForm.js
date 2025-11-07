@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, message, Card, Space, Select, DatePicker } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../api/api';
 import dayjs from 'dayjs';
 
 const { Option } = Select;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, message, Card, Tag } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import axios from '../api/api';
 
 const ServiceCenterList = () => {
   const [serviceCenters, setServiceCenters] = useState([]);

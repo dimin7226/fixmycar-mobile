@@ -16,7 +16,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CarRepository carRepository;
     private final ServiceRequestRepository serviceRequestRepository;
-    private final InMemoryCache<Long, Customer> customerCache;
+    //private final InMemoryCache<Long, Customer> customerCache;
 
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
@@ -24,12 +24,12 @@ public class CustomerService {
 
     public Optional<Customer> getCustomerById(Long id) {
 
-        Customer cachedCustomer = customerCache.get(id);
-        if (cachedCustomer != null) {
-            return Optional.of(cachedCustomer);
-        }
+//        Customer cachedCustomer = customerCache.get(id);
+//        if (cachedCustomer != null) {
+//            return Optional.of(cachedCustomer);
+//        }
         Optional<Customer> customer = customerRepository.findById(id);
-        customer.ifPresent(acc -> customerCache.put(id, acc));
+        //customer.ifPresent(acc -> customerCache.put(id, acc));
 
         return customer;
     }
@@ -37,14 +37,14 @@ public class CustomerService {
     public Customer saveOrUpdateCustomer(Customer customer) {
         Customer savedCustomer = customerRepository.save(customer);
 
-        customerCache.put(savedCustomer.getId(), savedCustomer);
+        //customerCache.put(savedCustomer.getId(), savedCustomer);
         return savedCustomer;
     }
 
     public void deleteCustomer(Long id) {
         customerRepository.deleteById(id);
 
-        customerCache.evict(id);
+        //customerCache.evict(id);
     }
 
     public boolean existsByEmail(String email) {

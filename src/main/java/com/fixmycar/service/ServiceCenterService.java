@@ -17,26 +17,26 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ServiceCenterService {
     private final ServiceCenterRepository serviceCenterRepository;
-    private final InMemoryCache<Long, ServiceCenter> serviceCenterCache;
+    //private final InMemoryCache<Long, ServiceCenter> serviceCenterCache;
 
     public List<ServiceCenter> getAllServiceCenters() {
         return serviceCenterRepository.findAll();
     }
 
     public Optional<ServiceCenter> getServiceCenterById(Long id) {
-        ServiceCenter cachedServiceCenter = serviceCenterCache.get(id);
-        if (cachedServiceCenter != null) {
-            return Optional.of(cachedServiceCenter);
-        }
+        //ServiceCenter cachedServiceCenter = serviceCenterCache.get(id);
+//        if (cachedServiceCenter != null) {
+//            return Optional.of(cachedServiceCenter);
+//        }
         Optional<ServiceCenter> serviceCenter = serviceCenterRepository.findById(id);
-        serviceCenter.ifPresent(sc -> serviceCenterCache.put(id, sc));
+        //serviceCenter.ifPresent(sc -> serviceCenterCache.put(id, sc));
 
         return serviceCenter;
     }
 
     public ServiceCenter saveServiceCenter(ServiceCenter serviceCenter) {
         ServiceCenter savedServiceCenter = serviceCenterRepository.save(serviceCenter);
-        serviceCenterCache.put(savedServiceCenter.getId(), savedServiceCenter);
+        //serviceCenterCache.put(savedServiceCenter.getId(), savedServiceCenter);
         return savedServiceCenter;
     }
 
@@ -50,12 +50,12 @@ public class ServiceCenterService {
         serviceCenter.setPhone(serviceCenterDetails.getPhone());
 
         ServiceCenter updatedServiceCenter = serviceCenterRepository.save(serviceCenter);
-        serviceCenterCache.put(updatedServiceCenter.getId(), updatedServiceCenter);
+        //serviceCenterCache.put(updatedServiceCenter.getId(), updatedServiceCenter);
         return updatedServiceCenter;
     }
 
     public void deleteServiceCenter(Long id) {
         serviceCenterRepository.deleteById(id);
-        serviceCenterCache.evict(id);
+        //serviceCenterCache.evict(id);
     }
 }

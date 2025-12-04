@@ -27,7 +27,7 @@ public class ServiceRequestService {
     private final CarRepository carRepository;
     private final CustomerRepository customerRepository;
     private final ServiceCenterRepository serviceCenterRepository;
-    private final InMemoryCache<Long, ServiceRequest> requestCache;
+    //private final InMemoryCache<Long, ServiceRequest> requestCache;
 
     private Car findCarById(Long id) {
         return carRepository.findById(id)
@@ -65,12 +65,12 @@ public class ServiceRequestService {
     }
 
     public Optional<ServiceRequest> getRequestById(Long id) {
-        ServiceRequest cachedRequest = requestCache.get(id);
-        if (cachedRequest != null) {
-            return Optional.of(cachedRequest);
-        }
+//        ServiceRequest cachedRequest = requestCache.get(id);
+//        if (cachedRequest != null) {
+//            return Optional.of(cachedRequest);
+//        }
         Optional<ServiceRequest> request = requestRepository.findById(id);
-        request.ifPresent(req -> requestCache.put(id, req));
+        //request.ifPresent(req -> requestCache.put(id, req));
 
         return request;
     }
@@ -87,7 +87,7 @@ public class ServiceRequestService {
         updateEntityReferences(request, request);
         ServiceRequest savedRequest = requestRepository.save(request);
 
-        requestCache.put(savedRequest.getId(), savedRequest);
+        //requestCache.put(savedRequest.getId(), savedRequest);
         return savedRequest;
     }
 
@@ -101,13 +101,13 @@ public class ServiceRequestService {
         updateEntityReferences(request, requestDetails);
         ServiceRequest updatedRequest = requestRepository.save(request);
 
-        requestCache.put(updatedRequest.getId(), updatedRequest);
+        //requestCache.put(updatedRequest.getId(), updatedRequest);
         return updatedRequest;
     }
 
     public void deleteRequest(Long id) {
         requestRepository.deleteById(id);
-        requestCache.evict(id);
+        //requestCache.evict(id);
     }
 
     public List<ServiceRequest> getRequestsByCarAttributes(
@@ -151,7 +151,7 @@ public class ServiceRequestService {
                 .build();
 
         ServiceRequest savedRequest = requestRepository.save(request);
-        requestCache.put(savedRequest.getId(), savedRequest);
+        //requestCache.put(savedRequest.getId(), savedRequest);
         return savedRequest;
     }
 
@@ -160,7 +160,7 @@ public class ServiceRequestService {
                 .orElseThrow(() -> new ResourceNotFoundException("Заявка не найдена с id " + id));
         request.setStatus(status);
         ServiceRequest updatedRequest = requestRepository.save(request);
-        requestCache.put(updatedRequest.getId(), updatedRequest);
+        //requestCache.put(updatedRequest.getId(), updatedRequest);
         return updatedRequest;
     }
 }

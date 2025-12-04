@@ -37,4 +37,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     boolean existsByVin(String vin);
 
     boolean existsByVinAndIdNot(String vin, long id);
+    // Проверка существования по VIN с исключением по ID
+    boolean existsByVinAndIdNot(String vin, Long id);
+    
 }

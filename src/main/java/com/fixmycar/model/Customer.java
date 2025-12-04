@@ -33,6 +33,8 @@ public class Customer {
     private String email;
     @Column(unique = true)
     private String phone;
+    @Column(name = "password")
+    private String password;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL,
             orphanRemoval = true, fetch = FetchType.LAZY)

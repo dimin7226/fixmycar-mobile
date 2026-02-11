@@ -16,3 +16,5 @@ Interface language: xml.
 
 Used patterns:
 Observer - listeners of buttons
+
+![Запуск приложения](docs/assets/demo.gif)
